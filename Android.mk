@@ -5,7 +5,8 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
   creds.c \
   main.c \
-  perf_swevent.c
+  perf_swevent.c \
+  unlock_sh04e.c
 
 LOCAL_MODULE := run_root_shell
 LOCAL_MODULE_TAGS := optional
