@@ -77,7 +77,7 @@ main(int argc, char **argv)
     exit(EXIT_FAILURE);
   }
 
-  system("/system/bin/sh");
+  system(ROOT_COMMAND);
 
   exit(EXIT_SUCCESS);
 }
