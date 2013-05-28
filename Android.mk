@@ -63,7 +63,6 @@ LOCAL_SRC_FILES := \
 LOCAL_MODULE := install_backdoor
 LOCAL_MODULE_TAGS := optional
 LOCAL_FORCE_STATIC_EXECUTABLE := true
-LOCAL_STATIC_LIBRARIES := libdiagexploit
 LOCAL_STATIC_LIBRARIES += libcutils libc
 
 include $(BUILD_EXECUTABLE)
