@@ -37,10 +37,7 @@ include $(BUILD_EXECUTABLE)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-  cred.c \
-  kallsyms.c \
   unlock_sc04e.c \
-  ptmx.c \
   backdoor_mmap.c
 
 LOCAL_MODULE := run_unlock

