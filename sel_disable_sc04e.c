@@ -27,82 +27,6 @@ static unsigned long int check_reset_security_ops[] = {
   0xc1150630, //                                          ; security_ops
 };
 
-#define selinux_nf_ip_init_address                0xc0e1e748
-
-static unsigned long int check_selinux_nf_ip_init[] = {
-  0xe92d4010, //      STMPW   [SP], { R4, LR }
-  0xe59f404c, //      LDR     R4, =0xc0fa861c [$c0e1e7a0]
-  0xe5943000, //      LDR     R3, [R4]                    ; selinux_enabled
-  0xe3530000, //      CMPS    R3, #$0
-  0x0a00000e, //      BEQ     $c0e1e798
-  0xe59f0040, //      LDR     R0, =0xc0c946ea [$c0e1e7a4]
-  0xebe74ca2, //      BL      $c07f19f0                   ; printk
-  0xe3a01003, //      MOV     R1, #$3
-  0xe2840004, //      ADD     R0, R4, #$4                 ; selinux_ipv4_ops
-  0xebe20650, //      BL      $c06a00b4                   ; nf_register_hooks
-  0xe2501000, //      SUBS    R1, R0, #$0
-  0x159f002c, //      LDRNE   R0, =0xc0c94714 [$c0e1e7a8]
-  0x1a000005, //      BNE     $c0e1e794
-  0xe3a01002, //      MOV     R1, #$2
-  0xe2840058, //      ADD     R0, R4, #$58                ; selinux_ipv6_ops
-  0xebe2064a, //      BL      $c06a00b4                   ; nf_register_hooks
-  0xe2501000, //      SUBS    R1, R0, #$0
-  0x0a000001, //      BEQ     $c0e1e798
-  0xe59f0014, //      LDR     R0, =0xc0c94743 [$c0e1e7ac]
-  0xebe74c11, //      BL      $c07f17e0
-  0xe3a00000, //      MOV     R0, #$0
-  0xe8bd8010, //      LDMUW   [SP], { R4, PC }
-  0xc0fa861c, //                                          ; selinux_enabled
-  0xc0c946ea, //
-  0xc0c94714, //
-  0xc0c94743, //
-};
-
-#define init_sel_fs_address                       0xc0e1e924
-
-static unsigned long int check_init_sel_fs[] = {
-  0xe92d4038, //      STMPW   [SP], { R3-R5, LR }
-  0xe59f307c, //      LDR     R3, =0xc0fa861c [$c0e1e9ac] ; selinux_enabled
-  0xe5934000, //      LDR     R4, [R3]
-  0xe3540000, //      CMPS    R4, #$0
-  0x0a00001a, //      BEQ     $c0e1e9a4
-  0xe59f3070, //      LDR     R3, =0xc114f6b4 [$c0e1e9b0] ; fs_kobj
-  0xe59f0070, //      LDR     R0, =0xc0c94172 [$c0e1e9b4]
-  0xe59f5070, //      LDR     R5, =0xc1151668 [$c0e1e9b8] ; policy_opened
-  0xe5931000, //      LDR     R1, [R3]
-  0xebd2a880, //      BL      $c02c8b50                   ; kobject_create_and_add
-  0xe3500000, //      CMPS    R0, #$0
-  0xe5850024, //      STR     R0, [R5, #$24]              ; selinuxfs_kobj
-  0x03e0400b, //      MVNEQ   R4, #$b
-  0x0a000011, //      BEQ     $c0e1e9a4
-  0xe59f0058, //      LDR     R0, =0xc0fa8ab8 [$c0e1e9bc] ; sel_fs_type
-  0xebccb909, //      BL      $c014cd8c                   ; register_filesystem
-  0xe2504000, //      SUBS    R4, R0, #$0
-  0x0a000002, //      BEQ     $c0e1e978
-  0xe5950024, //      LDR     R0, [R5, #$24]              ; selinuxfs_kobj
-  0xebd2a5ef, //      BL      $c02c8134                   ; kobject_put
-  0xea00000a, //      B       $c0e1e9a4
-  0xe59f003c, //      LDR     R0, =0xc0fa8ab8 [$c0e1e9bc] ; sel_fs_type
-  0xe1a01004, //      MOV     R1, R4
-  0xebccc541, //      BL      $c014fe8c                   ; kern_mount_data
-  0xe3700a01, //      CMNS    R0, #$1000
-  0xe5850028, //      STR     R0, [R5, #$28]              ; selinuxfs_mount
-  0x9a000004, //      BLS     $c0e1e9a4
-  0xe59f0028, //      LDR     R0, =0xc0c94b23 [$c0e1e9c0]
-  0xebe74c15, //      BL      $c07f19f0                   ; printk
-  0xe5954028, //      LDR     R4, [R5, #$28]              ; selinuxfs_mount
-  0xe3a03000, //      MOV     R3, #$0
-  0xe5853028, //      STR     R3, [R5, #$28]              ; selinuxfs_mount
-  0xe1a00004, //      MOV     R0, R4
-  0xe8bd8038, //      LDMUW   [SP], { R3-R5, PC }
-  0xc0fa861c, //
-  0xc114f6b4, //                                          ; fs_kobj
-  0xc0c94172, //
-  0xc1151668, //
-  0xc0fa8ab8, //                                          ; sel_fs_type
-  0xc0c94b23, //
-};
-
 #define DEFINE_CHECK(name)  { name##_address, check_##name, sizeof(check_##name) }
 
 static struct {
@@ -112,8 +36,6 @@ static struct {
 } check_code[] =
 {
   DEFINE_CHECK(reset_security_ops),
-  DEFINE_CHECK(selinux_nf_ip_init),
-  DEFINE_CHECK(init_sel_fs),
 };
 
 static bool
