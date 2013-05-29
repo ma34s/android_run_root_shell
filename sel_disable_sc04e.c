@@ -113,9 +113,11 @@ selinux_set_disable(void)
 {
   result_selinux_set_disable = false;
 
+#if 0
   if (*p_ss_initialized) {
     return;
   }
+#endif
 
   *p_selinux_enabled = 0;
 
