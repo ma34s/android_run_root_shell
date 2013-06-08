@@ -78,9 +78,17 @@ main(int argc, char **argv)
     printf("Failed to obtain root privilege.\n");
     exit(EXIT_FAILURE);
   }
-
+#ifdef ENABLE_USER_COMMAND
+  if( argc < 1 )
+  {
+    printf("not exist command \n");
+    printf("  %s [command] \n",argv[0]);
+    exit(EXIT_FAILURE);
+  }
+  system(argv[1]);
+#else
   system(ROOT_COMMAND);
-
+#endif
   exit(EXIT_SUCCESS);
 }
 /*
