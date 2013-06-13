@@ -29,6 +29,7 @@ static supported_device supported_devices[] = {
   { "SOL21",  "9.1.D.0.395",        0xc0098584, 0xc00980a8 },
   { "HTL21",  "JRO03C",             0xc00ab9d8, 0xc00ab4c4 },
   { "SC-04E", "JDQ39.SC04EOMUAMDI", 0xc0096068, 0xc0095b54 },
+  { "SC-04E", "JDQ39.SC04EOMUAMF1", 0xc00960d0, 0xc0095bbc },
 };
 
 static int n_supported_devices = sizeof(supported_devices) / sizeof(supported_devices[0]);
