@@ -35,6 +35,7 @@ static supported_device supported_devices[] = {
   { "SC-04E", "JDQ39.SC04EOMUAMDI", 0x80208000, 0xc01206d8 },  // make sure it.
   { "SC-04E", "JDQ39.SC04EOMUAMF1", 0x80208000, 0xc0120740 },  // not tested yet
   { "SC-04E", "JDQ39.SC04EOMUAMF2", 0x80208000, 0xc012073c },  // not tested yet
+  { "SC-04E", "JDQ39.SC04EOMUAMG2", 0x80208000, 0xc0120744 },  // not tested yet
 };             
 
 static int n_supported_devices = sizeof(supported_devices) / sizeof(supported_devices[0]);
